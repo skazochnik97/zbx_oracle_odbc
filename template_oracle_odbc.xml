@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
-    <version>2.0</version>
-    <date>2014-11-24T06:39:53Z</date>
+    <version>3.2</version>
+    <date>2016-12-07T12:29:29Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -34,9 +34,9 @@
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
-                    <value_type>0</value_type>
+                    <value_type>3</value_type>
                     <allowed_hosts/>
-                    <units>MB</units>
+                    <units/>
                     <delta>0</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
@@ -47,7 +47,10 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>select round(A.LOGS*B.AVG/1024/1024/10) from ( SELECT COUNT (*)  LOGS FROM V$LOG_HISTORY WHERE FIRST_TIME &gt;= (sysdate -10/60/24)) A, ( SELECT Avg(BYTES) AVG,  Count(1), Max(BYTES) Max_Bytes, Min(BYTES) Min_Bytes  FROM  v$log) B</params>
+                    <params>select TO_CHAR(round(A.LOGS*B.AVG/1024/1024/10)) logs &#13;
+from ( SELECT COUNT (*)  LOGS FROM V$LOG_HISTORY &#13;
+WHERE FIRST_TIME &gt;= (sysdate -10/60/24)) A, &#13;
+( SELECT Avg(BYTES) AVG,  Count(1), Max(BYTES) Max_Bytes, Min(BYTES) Min_Bytes  FROM  v$log) B</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -75,7 +78,7 @@
                     <key>db.odbc.select[ora_audit, {$DSN}]</key>
                     <delay>300</delay>
                     <history>90</history>
-                    <trends>365</trends>
+                    <trends>0</trends>
                     <status>1</status>
                     <value_type>4</value_type>
                     <allowed_hosts/>
@@ -123,7 +126,7 @@
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units/>
-                    <delta>0</delta>
+                    <delta>1</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
                     <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -166,7 +169,7 @@
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units/>
-                    <delta>0</delta>
+                    <delta>1</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
                     <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -219,7 +222,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>select ( sum(decode(name,'consistent gets', value,0)) + sum(decode(name,'db block gets', value,0)) - sum(decode(name,'physical reads', value,0))) / (sum(decode(name,'consistent gets', value,0)) + sum(decode(name,'db block gets', value,0)) ) * 100 &quot;hit_ratio&quot; FROM v$sysstat</params>
+                    <params>select to_char(( sum(decode(name,'consistent gets', value,0)) + sum(decode(name,'db block gets', value,0)) - sum(decode(name,'physical reads', value,0))) / (sum(decode(name,'consistent gets', value,0)) + sum(decode(name,'db block gets', value,0)) ) * 100) hitratio FROM v$sysstat</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -252,7 +255,7 @@
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units/>
-                    <delta>0</delta>
+                    <delta>1</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
                     <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -262,7 +265,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>select sum(decode(name,'physical reads', value,0)) &quot;phys_reads&quot; FROM v$sysstat</params>
+                    <params>select to_char(sum(decode(name,'physical reads', value,0))) physreads FROM v$sysstat</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -290,8 +293,8 @@
                     <key>db.odbc.select[ora_dbversion, {$DSN}]</key>
                     <delay>300</delay>
                     <history>90</history>
-                    <trends>365</trends>
-                    <status>0</status>
+                    <trends>0</trends>
+                    <status>1</status>
                     <value_type>4</value_type>
                     <allowed_hosts/>
                     <units/>
@@ -348,7 +351,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>select gethitratio*100 &quot;get_pct&quot; FROM v$librarycache where namespace ='BODY'</params>
+                    <params>select to_char(gethitratio*100) getpct FROM v$librarycache where namespace ='BODY'</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -391,7 +394,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>select gethitratio*100 &quot;get_pct&quot; FROM v$librarycache where namespace ='SQL AREA'</params>
+                    <params>select to_char(gethitratio*100) get_pct FROM v$librarycache where namespace ='SQL AREA'</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -434,7 +437,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>select gethitratio*100 &quot;get_pct&quot; FROM v$librarycache where namespace = 'TABLE/PROCEDURE'</params>
+                    <params>select to_char(gethitratio*100) getpct FROM v$librarycache where namespace = 'TABLE/PROCEDURE'</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -477,7 +480,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>select gethitratio*100 &quot;get_pct&quot; FROM v$librarycache where namespace ='TRIGGER'</params>
+                    <params>select to_char(gethitratio*100) getpct FROM v$librarycache where namespace ='TRIGGER'</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -510,7 +513,7 @@
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units>Blocks/sec</units>
-                    <delta>0</delta>
+                    <delta>1</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
                     <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -553,7 +556,7 @@
                     <value_type>0</value_type>
                     <allowed_hosts/>
                     <units>Blocks/sec</units>
-                    <delta>0</delta>
+                    <delta>1</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
                     <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -596,7 +599,7 @@
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units>Blocks/sec</units>
-                    <delta>0</delta>
+                    <delta>1</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
                     <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -634,7 +637,7 @@
                     <key>db.odbc.select[ora_locks, {$DSN}]</key>
                     <delay>300</delay>
                     <history>90</history>
-                    <trends>365</trends>
+                    <trends>0</trends>
                     <status>1</status>
                     <value_type>4</value_type>
                     <allowed_hosts/>
@@ -675,7 +678,7 @@
                     <multiplier>0</multiplier>
                     <snmp_oid/>
                     <key>db.odbc.select[ora_maxprocs, {$DSN}]</key>
-                    <delay>300</delay>
+                    <delay>86400</delay>
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
@@ -718,7 +721,7 @@
                     <multiplier>0</multiplier>
                     <snmp_oid/>
                     <key>db.odbc.select[ora_maxsession, {$DSN}]</key>
-                    <delay>300</delay>
+                    <delay>86400</delay>
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
@@ -778,7 +781,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>SELECT SUM(misses) FROM V$LATCH</params>
+                    <params>SELECT to_char(SUM(misses)) misslatch FROM v$latch</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -808,9 +811,9 @@
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
-                    <value_type>0</value_type>
+                    <value_type>3</value_type>
                     <allowed_hosts/>
-                    <units/>
+                    <units>B</units>
                     <delta>0</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
@@ -821,7 +824,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>select to_char(decode( unit,'bytes', value/1024/1024, value),'999999999.9') value from V$PGASTAT where name in 'total PGA inuse'</params>
+                    <params>select  to_char(value) value from V$PGASTAT where name in 'total PGA inuse'</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -851,9 +854,9 @@
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
-                    <value_type>0</value_type>
+                    <value_type>3</value_type>
                     <allowed_hosts/>
-                    <units/>
+                    <units>B</units>
                     <delta>0</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
@@ -864,7 +867,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>select to_char(decode( unit,'bytes', value/1024/1024, value),'999999999.9') value from V$PGASTAT where name in 'aggregate PGA target parameter'</params>
+                    <params>select to_char(value) value from V$PGASTAT where name in 'aggregate PGA target parameter'</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -897,7 +900,7 @@
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units>IO/sec</units>
-                    <delta>0</delta>
+                    <delta>1</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
                     <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -940,7 +943,7 @@
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units>IO/sec</units>
-                    <delta>0</delta>
+                    <delta>1</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
                     <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -983,7 +986,7 @@
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units>IO/sec</units>
-                    <delta>0</delta>
+                    <delta>1</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
                     <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -994,6 +997,49 @@
                     <formula>1</formula>
                     <delay_flex/>
                     <params>select to_char(sum(decode(name,'redo writes',value,0))) FROM V$SYSSTAT where name ='redo writes'</params>
+                    <ipmi_sensor/>
+                    <data_type>0</data_type>
+                    <authtype>0</authtype>
+                    <username>{$ORA_USER}</username>
+                    <password>{$ORA_PASS}</password>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <description/>
+                    <inventory_link>0</inventory_link>
+                    <applications>
+                        <application>
+                            <name>Oracle</name>
+                        </application>
+                    </applications>
+                    <valuemap/>
+                    <logtimefmt/>
+                </item>
+                <item>
+                    <name>PHI/O Redo Writes time</name>
+                    <type>11</type>
+                    <snmp_community/>
+                    <multiplier>0</multiplier>
+                    <snmp_oid/>
+                    <key>db.odbc.select[ora_phio_redo_writes_time, {$DSN}]</key>
+                    <delay>300</delay>
+                    <history>90</history>
+                    <trends>365</trends>
+                    <status>0</status>
+                    <value_type>3</value_type>
+                    <allowed_hosts/>
+                    <units>s</units>
+                    <delta>2</delta>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <formula>1</formula>
+                    <delay_flex/>
+                    <params>select to_char(sum(decode(name,'redo write time',value,0))) FROM V$SYSSTAT where name ='redo write time'</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1036,7 +1082,93 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>select pins/(pins+reloads)*100 &quot;pin_hit ratio&quot; FROM v$librarycache where namespace ='BODY'</params>
+                    <params>select to_char(gethitratio*100) pinhitratio FROM v$librarycache where namespace ='BODY'</params>
+                    <ipmi_sensor/>
+                    <data_type>0</data_type>
+                    <authtype>0</authtype>
+                    <username>{$ORA_USER}</username>
+                    <password>{$ORA_PASS}</password>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <description/>
+                    <inventory_link>0</inventory_link>
+                    <applications>
+                        <application>
+                            <name>Oracle</name>
+                        </application>
+                    </applications>
+                    <valuemap/>
+                    <logtimefmt/>
+                </item>
+                <item>
+                    <name>Pin hit ratio - DBLINK</name>
+                    <type>11</type>
+                    <snmp_community/>
+                    <multiplier>0</multiplier>
+                    <snmp_oid/>
+                    <key>db.odbc.select[ora_pinhitratio_dblink, {$DSN}]</key>
+                    <delay>300</delay>
+                    <history>90</history>
+                    <trends>365</trends>
+                    <status>0</status>
+                    <value_type>0</value_type>
+                    <allowed_hosts/>
+                    <units>%</units>
+                    <delta>0</delta>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <formula>1</formula>
+                    <delay_flex/>
+                    <params>select to_char(gethitratio*100) FROM v$librarycache where namespace ='DBLINK'</params>
+                    <ipmi_sensor/>
+                    <data_type>0</data_type>
+                    <authtype>0</authtype>
+                    <username>{$ORA_USER}</username>
+                    <password>{$ORA_PASS}</password>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <description/>
+                    <inventory_link>0</inventory_link>
+                    <applications>
+                        <application>
+                            <name>Oracle</name>
+                        </application>
+                    </applications>
+                    <valuemap/>
+                    <logtimefmt/>
+                </item>
+                <item>
+                    <name>Pin hit ratio - INDEX</name>
+                    <type>11</type>
+                    <snmp_community/>
+                    <multiplier>0</multiplier>
+                    <snmp_oid/>
+                    <key>db.odbc.select[ora_pinhitratio_index, {$DSN}]</key>
+                    <delay>300</delay>
+                    <history>90</history>
+                    <trends>365</trends>
+                    <status>0</status>
+                    <value_type>0</value_type>
+                    <allowed_hosts/>
+                    <units>%</units>
+                    <delta>0</delta>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <formula>1</formula>
+                    <delay_flex/>
+                    <params>select to_char(gethitratio*100) pinhitratio FROM v$librarycache where namespace ='INDEX'</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1079,7 +1211,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>select pins/(pins+reloads)*100 &quot;pin_hit ratio&quot; FROM v$librarycache where namespace ='SQL AREA'</params>
+                    <params>select to_char(gethitratio*100) pinhitratio FROM v$librarycache where namespace ='SQL AREA'</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1122,7 +1254,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>select to_char((sysdate-startup_time)*86400, 'FM99999999999999990') retvalue from v$instance</params>
+                    <params>select to_char(gethitratio*100) pinhitratio FROM v$librarycache where namespace ='TABLE/PROCEDURE'</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1165,7 +1297,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>select pins/(pins+reloads)*100 &quot;pin_hit ratio&quot; FROM v$librarycache where namespace ='TRIGGER'</params>
+                    <params>select to_char(gethitratio*100) pinhitratio FROM v$librarycache where namespace ='TRIGGER'</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1195,9 +1327,9 @@
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
-                    <value_type>0</value_type>
+                    <value_type>3</value_type>
                     <allowed_hosts/>
-                    <units>M</units>
+                    <units>B</units>
                     <delta>0</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
@@ -1208,7 +1340,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>SELECT TO_CHAR(ROUND(SUM(decode(pool,'shared pool',decode(name,'dictionary cache',(bytes)/(1024*1024),0),0)),2)) pool_dict_cache FROM V$SGASTAT</params>
+                    <params>SELECT TO_CHAR(ROUND(SUM(decode(pool,'shared pool',decode(name,'dictionary cache',(bytes),0),0)),2)) pool_dict_cache FROM V$SGASTAT</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1238,9 +1370,9 @@
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
-                    <value_type>0</value_type>
+                    <value_type>3</value_type>
                     <allowed_hosts/>
-                    <units>M</units>
+                    <units>B</units>
                     <delta>0</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
@@ -1251,7 +1383,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>SELECT TO_CHAR(ROUND(SUM(decode(pool,'shared pool',decode(name,'free memory',(bytes)/(1024*1024),0),0)),2)) pool_free_mem FROM V$SGASTAT</params>
+                    <params>SELECT TO_CHAR(ROUND(SUM(decode(pool,'shared pool',decode(name,'free memory',(bytes),0),0)),2)) pool_free_mem FROM V$SGASTAT</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1281,9 +1413,9 @@
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
-                    <value_type>0</value_type>
+                    <value_type>3</value_type>
                     <allowed_hosts/>
-                    <units>M</units>
+                    <units>B</units>
                     <delta>0</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
@@ -1294,7 +1426,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>SELECT TO_CHAR(ROUND(SUM(decode(pool,'shared pool',decode(name,'library cache',(bytes)/(1024*1024),0),0)),2)) pool_lib_cache FROM V$SGASTAT</params>
+                    <params>SELECT TO_CHAR(ROUND(SUM(decode(pool,'shared pool',decode(name,'library cache',(bytes),0),0)),2)) pool_lib_cache FROM V$SGASTAT</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1324,9 +1456,9 @@
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
-                    <value_type>0</value_type>
+                    <value_type>3</value_type>
                     <allowed_hosts/>
-                    <units>M</units>
+                    <units>B</units>
                     <delta>0</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
@@ -1337,7 +1469,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>SELECT TO_CHAR(ROUND(SUM(decode(pool,'shared pool',decode(name,'library cache',0,'dictionary cache',0,'free memory',0,'sql area', 0,(bytes)/(1024*1024)),0)),2)) pool_misc FROM V$SGASTAT</params>
+                    <params>SELECT TO_CHAR(ROUND(SUM(decode(pool,'shared pool',decode(name,'library cache',0,'dictionary cache',0,'free memory',0,'sql area', 0,(bytes)),0)),2)) pool_misc FROM V$SGASTAT</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1367,9 +1499,9 @@
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
-                    <value_type>0</value_type>
+                    <value_type>3</value_type>
                     <allowed_hosts/>
-                    <units>M</units>
+                    <units>B</units>
                     <delta>0</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
@@ -1380,7 +1512,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>SELECT TO_CHAR(ROUND(SUM(decode(pool,'shared pool',decode(name,'sql area',(bytes)/(1024*1024),0),0)),2)) pool_sql_area FROM V$SGASTAT</params>
+                    <params>SELECT TO_CHAR(ROUND(SUM(decode(pool,'shared pool',decode(name,'sql area',(bytes),0),0)),2)) pool_sql_area FROM V$SGASTAT</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1423,93 +1555,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>select count(*) &quot;procnum&quot; from v$process</params>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username>{$ORA_USER}</username>
-                    <password>{$ORA_PASS}</password>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>Oracle</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
-                    <logtimefmt/>
-                </item>
-                <item>
-                    <name>Session Active</name>
-                    <type>11</type>
-                    <snmp_community/>
-                    <multiplier>0</multiplier>
-                    <snmp_oid/>
-                    <key>db.odbc.select[ora_session_active, {$DSN}]</key>
-                    <delay>300</delay>
-                    <history>90</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params>select count(*) from v$session where TYPE!='BACKGROUND' and status='ACTIVE'</params>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username>{$ORA_USER}</username>
-                    <password>{$ORA_PASS}</password>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>Oracle</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
-                    <logtimefmt/>
-                </item>
-                <item>
-                    <name>Session Inactive</name>
-                    <type>11</type>
-                    <snmp_community/>
-                    <multiplier>0</multiplier>
-                    <snmp_oid/>
-                    <key>db.odbc.select[ora_session_inactive, {$DSN}]</key>
-                    <delay>300</delay>
-                    <history>90</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params>select SUM(Decode(Type, 'BACKGROUND', 0, Decode(Status, 'ACTIVE', 0, 1))) FROM V$SESSION</params>
+                    <params>select to_char(count(*)) procnum from v$process</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1552,7 +1598,93 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>select count(*) from v$session</params>
+                    <params>select to_char(count(*)) from v$session</params>
+                    <ipmi_sensor/>
+                    <data_type>0</data_type>
+                    <authtype>0</authtype>
+                    <username>{$ORA_USER}</username>
+                    <password>{$ORA_PASS}</password>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <description/>
+                    <inventory_link>0</inventory_link>
+                    <applications>
+                        <application>
+                            <name>Oracle</name>
+                        </application>
+                    </applications>
+                    <valuemap/>
+                    <logtimefmt/>
+                </item>
+                <item>
+                    <name>Session Active</name>
+                    <type>11</type>
+                    <snmp_community/>
+                    <multiplier>0</multiplier>
+                    <snmp_oid/>
+                    <key>db.odbc.select[ora_session_active, {$DSN}]</key>
+                    <delay>300</delay>
+                    <history>90</history>
+                    <trends>365</trends>
+                    <status>0</status>
+                    <value_type>3</value_type>
+                    <allowed_hosts/>
+                    <units/>
+                    <delta>0</delta>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <formula>1</formula>
+                    <delay_flex/>
+                    <params>select to_char(count(*)) from v$session where TYPE!='BACKGROUND' and status='ACTIVE'</params>
+                    <ipmi_sensor/>
+                    <data_type>0</data_type>
+                    <authtype>0</authtype>
+                    <username>{$ORA_USER}</username>
+                    <password>{$ORA_PASS}</password>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <description/>
+                    <inventory_link>0</inventory_link>
+                    <applications>
+                        <application>
+                            <name>Oracle</name>
+                        </application>
+                    </applications>
+                    <valuemap/>
+                    <logtimefmt/>
+                </item>
+                <item>
+                    <name>Session Inactive</name>
+                    <type>11</type>
+                    <snmp_community/>
+                    <multiplier>0</multiplier>
+                    <snmp_oid/>
+                    <key>db.odbc.select[ora_session_inactive, {$DSN}]</key>
+                    <delay>300</delay>
+                    <history>90</history>
+                    <trends>365</trends>
+                    <status>0</status>
+                    <value_type>3</value_type>
+                    <allowed_hosts/>
+                    <units/>
+                    <delta>0</delta>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <formula>1</formula>
+                    <delay_flex/>
+                    <params>select to_char(sum(Decode(Type, 'BACKGROUND', 0, Decode(Status, 'ACTIVE', 0, 1)))) sum FROM v$session</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1595,7 +1727,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>select SUM(Decode(Type, 'BACKGROUND', 1, 0)) system_sessions FROM V$SESSION</params>
+                    <params>select to_char(sum(Decode(Type, 'BACKGROUND', 1, 0))) systemsessions FROM v$session</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1625,9 +1757,9 @@
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
-                    <value_type>0</value_type>
+                    <value_type>3</value_type>
                     <allowed_hosts/>
-                    <units>M</units>
+                    <units>B</units>
                     <delta>0</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
@@ -1638,7 +1770,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>SELECT to_char(ROUND(SUM(decode(pool,NULL,decode(name,'db_block_buffers',(bytes)/(1024*1024),'buffer_cache',(bytes)/(1024*1024),0),0)),2)) sga_bufcache FROM V$SGASTAT</params>
+                    <params>SELECT to_char(ROUND(SUM(decode(pool,NULL,decode(name,'db_block_buffers',(bytes),'buffer_cache',(bytes),0),0)),2)) sgabufcache FROM V$SGASTAT</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1668,9 +1800,9 @@
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
-                    <value_type>0</value_type>
+                    <value_type>3</value_type>
                     <allowed_hosts/>
-                    <units>M</units>
+                    <units>B</units>
                     <delta>0</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
@@ -1681,7 +1813,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>SELECT TO_CHAR(ROUND(SUM(decode(pool,NULL,decode(name,'fixed_sga',(bytes)/(1024*1024),0),0)),2)) sga_fixed FROM V$SGASTAT</params>
+                    <params>SELECT TO_CHAR(ROUND(SUM(decode(pool,NULL,decode(name,'fixed_sga',(bytes),0),0)),2)) sgafixed FROM V$SGASTAT</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1711,9 +1843,9 @@
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
-                    <value_type>0</value_type>
+                    <value_type>3</value_type>
                     <allowed_hosts/>
-                    <units>M</units>
+                    <units>B</units>
                     <delta>0</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
@@ -1724,7 +1856,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>SELECT to_char(ROUND(SUM(decode(pool,'java pool',(bytes)/(1024*1024),0)),2)) sga_jpool FROM V$SGASTAT</params>
+                    <params>SELECT to_char(ROUND(SUM(decode(pool,'java pool',(bytes),0)),2)) sgajpool FROM V$SGASTAT</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1754,9 +1886,9 @@
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
-                    <value_type>0</value_type>
+                    <value_type>3</value_type>
                     <allowed_hosts/>
-                    <units>M</units>
+                    <units>B</units>
                     <delta>0</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
@@ -1767,7 +1899,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>SELECT to_char(ROUND(SUM(decode(pool,'large pool',(bytes)/(1024*1024),0)),2)) sga_lpool FROM V$SGASTAT</params>
+                    <params>SELECT to_char(ROUND(SUM(decode(pool,'large pool',(bytes),0)),2)) sga_lpool FROM V$SGASTAT</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1797,9 +1929,9 @@
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
-                    <value_type>0</value_type>
+                    <value_type>3</value_type>
                     <allowed_hosts/>
-                    <units>M</units>
+                    <units>B</units>
                     <delta>0</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
@@ -1810,7 +1942,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>SELECT TO_CHAR(ROUND(SUM(decode(pool,NULL,decode(name,'log_buffer',(bytes)/(1024*1024),0),0)),2)) sga_lbuffer FROM V$SGASTAT</params>
+                    <params>SELECT TO_CHAR(ROUND(SUM(decode(pool,NULL,decode(name,'log_buffer',(bytes),0),0)),2)) sga_lbuffer FROM V$SGASTAT</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1840,9 +1972,9 @@
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
-                    <value_type>0</value_type>
+                    <value_type>3</value_type>
                     <allowed_hosts/>
-                    <units>M</units>
+                    <units>B</units>
                     <delta>0</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
@@ -1853,7 +1985,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>SELECT TO_CHAR(ROUND(SUM(decode(pool,'shared pool',decode(name,'library cache',0,'dictionary cache',0,'free memory',0,'sql area',0,(bytes)/(1024*1024)),0)),2)) pool_misc FROM V$SGASTAT</params>
+                    <params>SELECT TO_CHAR(ROUND(SUM(decode(pool,'shared pool',decode(name,'library cache',0,'dictionary cache',0,'free memory',0,'sql area',0,(bytes)),0)),2)) poolmisc FROM V$SGASTAT</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1885,7 +2017,7 @@
                     <status>0</status>
                     <value_type>0</value_type>
                     <allowed_hosts/>
-                    <units/>
+                    <units>%</units>
                     <delta>0</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
@@ -1896,7 +2028,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>SELECT SUM(DECODE(NAME, 'table scans (long tables)', VALUE, 0))/ (SUM(DECODE(NAME, 'table scans (long tables)', VALUE, 0))+SUM(DECODE(NAME, 'table scans (short tables)', VALUE, 0)))*100 SQL_NOT_INDEXED FROM V$SYSSTAT WHERE 1=1 AND ( NAME IN ('table scans (long tables)','table scans (short tables)') )</params>
+                    <params>SELECT to_char(SUM(DECODE(NAME, 'table scans (long tables)', VALUE, 0))/ (SUM(DECODE(NAME, 'table scans (long tables)', VALUE, 0))+SUM(DECODE(NAME, 'table scans (short tables)', VALUE, 0)))*100) value FROM v$SYSSTAT WHERE 1=1 AND ( NAME IN ('table scans (long tables)','table scans (short tables)') )</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -1924,7 +2056,7 @@
                     <key>db.odbc.select[ora_tbl_space, {$DSN}]</key>
                     <delay>300</delay>
                     <history>90</history>
-                    <trends>365</trends>
+                    <trends>0</trends>
                     <status>1</status>
                     <value_type>4</value_type>
                     <allowed_hosts/>
@@ -2025,7 +2157,7 @@
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>select count(username) from v$session where username is not null</params>
+                    <params>select to_char(count(username)) value from v$session where username is not null</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -2053,7 +2185,7 @@
                     <key>db.odbc.select[ora_users_locked, {$DSN}]</key>
                     <delay>300</delay>
                     <history>90</history>
-                    <trends>365</trends>
+                    <trends>0</trends>
                     <status>0</status>
                     <value_type>4</value_type>
                     <allowed_hosts/>
@@ -2166,7 +2298,7 @@ SELECT username&#13;
                     <snmpv3_privpassphrase/>
                     <formula>1</formula>
                     <delay_flex/>
-                    <params>SELECT to_char(sum(decode(event,'direct path read',total_waits,0))) DirectPathRead FROM V$system_event WHERE 1=1 AND event not in (   'SQL*Net message from ', 'SQL*Net more data from client','pmon timer', 'rdbms ipc message', 'rdbms ipc reply', 'smon timer')</params>
+                    <params>SELECT to_char(sum(decode(event,'direct path read',total_waits,0))) DirectPathRead FROM v$system_event WHERE 1=1 AND event not in (   'SQL*Net message from ', 'SQL*Net more data from client','pmon timer', 'rdbms ipc message', 'rdbms ipc reply', 'smon timer')</params>
                     <ipmi_sensor/>
                     <data_type>0</data_type>
                     <authtype>0</authtype>
@@ -2192,7 +2324,7 @@ SELECT username&#13;
                     <multiplier>0</multiplier>
                     <snmp_oid/>
                     <key>db.odbc.select[ora_waits_file_io, {$DSN}]</key>
-                    <delay>30</delay>
+                    <delay>60</delay>
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
@@ -2235,7 +2367,7 @@ SELECT username&#13;
                     <multiplier>0</multiplier>
                     <snmp_oid/>
                     <key>db.odbc.select[ora_waits_latch, {$DSN}]</key>
-                    <delay>30</delay>
+                    <delay>60</delay>
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
@@ -2278,7 +2410,7 @@ SELECT username&#13;
                     <multiplier>0</multiplier>
                     <snmp_oid/>
                     <key>db.odbc.select[ora_waits_logwrite, {$DSN}]</key>
-                    <delay>30</delay>
+                    <delay>60</delay>
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
@@ -2321,7 +2453,7 @@ SELECT username&#13;
                     <multiplier>0</multiplier>
                     <snmp_oid/>
                     <key>db.odbc.select[ora_waits_multiblock_read, {$DSN}]</key>
-                    <delay>30</delay>
+                    <delay>60</delay>
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
@@ -2364,7 +2496,7 @@ SELECT username&#13;
                     <multiplier>0</multiplier>
                     <snmp_oid/>
                     <key>db.odbc.select[ora_waits_other, {$DSN}]</key>
-                    <delay>30</delay>
+                    <delay>60</delay>
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
@@ -2407,7 +2539,7 @@ SELECT username&#13;
                     <multiplier>0</multiplier>
                     <snmp_oid/>
                     <key>db.odbc.select[ora_waits_singleblock_read, {$DSN}]</key>
-                    <delay>30</delay>
+                    <delay>60</delay>
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
@@ -2450,7 +2582,7 @@ SELECT username&#13;
                     <multiplier>0</multiplier>
                     <snmp_oid/>
                     <key>db.odbc.select[ora_waits_sqlnet, {$DSN}]</key>
-                    <delay>30</delay>
+                    <delay>60</delay>
                     <history>90</history>
                     <trends>365</trends>
                     <status>0</status>
@@ -2487,7 +2619,142 @@ SELECT username&#13;
                     <logtimefmt/>
                 </item>
             </items>
-            <discovery_rules/>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>Oracle Tablespaces ODBC</name>
+                    <type>11</type>
+                    <snmp_community/>
+                    <snmp_oid/>
+                    <key>db.odbc.discovery[ora_tablespace,{$DSN}]</key>
+                    <delay>30</delay>
+                    <status>0</status>
+                    <allowed_hosts/>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <delay_flex/>
+                    <params>select to_char(tablespace_name) name from dba_tablespaces</params>
+                    <ipmi_sensor/>
+                    <authtype>0</authtype>
+                    <username>{$ORA_USER}</username>
+                    <password>{$ORA_PASS}</password>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <filter>
+                        <evaltype>0</evaltype>
+                        <formula/>
+                        <conditions>
+                            <condition>
+                                <macro>{#NAME}</macro>
+                                <value>@Oracle System Excluded Tablespaces</value>
+                                <operator>8</operator>
+                                <formulaid>A</formulaid>
+                            </condition>
+                        </conditions>
+                    </filter>
+                    <lifetime>30</lifetime>
+                    <description/>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Oracle Tablespaces item ODBC prot</name>
+                            <type>11</type>
+                            <snmp_community/>
+                            <multiplier>0</multiplier>
+                            <snmp_oid/>
+                            <key>db.odbc.select[ora_TS_{#NAME}_msize,{$DSN}]</key>
+                            <delay>60</delay>
+                            <history>90</history>
+                            <trends>365</trends>
+                            <status>0</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <delta>0</delta>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <formula>1</formula>
+                            <delay_flex/>
+                            <params>select to_char(sum(df.bytes)) msize&#13;
+from v$datafile df, v$tablespace ts&#13;
+where df.ts# = ts.ts#&#13;
+and ts.name = '{#NAME}'&#13;
+group by ts.NAME</params>
+                            <ipmi_sensor/>
+                            <data_type>0</data_type>
+                            <authtype>0</authtype>
+                            <username>{$ORA_USER}</username>
+                            <password>{$ORA_PASS}</password>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <application_prototypes/>
+                        </item_prototype>
+                    </item_prototypes>
+                    <trigger_prototypes/>
+                    <graph_prototypes/>
+                    <host_prototypes/>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>Oracle Tablespaces</name>
+                    <type>10</type>
+                    <snmp_community/>
+                    <snmp_oid/>
+                    <key>oracle.odbc.discovery[{$DSN},tablespaces]</key>
+                    <delay>30</delay>
+                    <status>1</status>
+                    <allowed_hosts/>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <delay_flex/>
+                    <params/>
+                    <ipmi_sensor/>
+                    <authtype>0</authtype>
+                    <username/>
+                    <password/>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <filter>
+                        <evaltype>2</evaltype>
+                        <formula/>
+                        <conditions>
+                            <condition>
+                                <macro>{#TBSNAME}</macro>
+                                <value>@Oracle System Excluded Tablespaces</value>
+                                <operator>8</operator>
+                                <formulaid>A</formulaid>
+                            </condition>
+                        </conditions>
+                    </filter>
+                    <lifetime>30</lifetime>
+                    <description/>
+                    <item_prototypes/>
+                    <trigger_prototypes/>
+                    <graph_prototypes/>
+                    <host_prototypes/>
+                </discovery_rule>
+            </discovery_rules>
+            <httptests/>
             <macros/>
             <templates/>
             <screens/>
@@ -2495,154 +2762,244 @@ SELECT username&#13;
     </templates>
     <triggers>
         <trigger>
-            <expression>{template_oracle_odbc:db.odbc.select[ora_session_active, {$DSN}].last()}&gt;20</expression>
+            <expression>{template_oracle_odbc:db.odbc.select[ora_session_active, {$DSN}].last()}&gt;10</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
             <name>Active Session {HOST.HOST}</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
             <url/>
             <status>0</status>
             <priority>4</priority>
             <description>DANGER</description>
             <type>0</type>
+            <manual_close>0</manual_close>
             <dependencies/>
+            <tags/>
         </trigger>
         <trigger>
-            <expression>{template_oracle_odbc:db.odbc.select[ora_session_active, {$DSN}].last()}&gt;10</expression>
+            <expression>{template_oracle_odbc:db.odbc.select[ora_session_active, {$DSN}].last()}&gt;20</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
             <name>Active Session {HOST.HOST}</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
             <url/>
             <status>0</status>
             <priority>4</priority>
             <description>DANGER</description>
             <type>0</type>
+            <manual_close>0</manual_close>
             <dependencies/>
+            <tags/>
         </trigger>
         <trigger>
             <expression>{template_oracle_odbc:db.odbc.select[ora_session_active, {$DSN}].last()}&gt;120</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
             <name>Active Session {HOST.HOST}</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
             <url/>
             <status>0</status>
             <priority>4</priority>
             <description>DANGER</description>
             <type>0</type>
+            <manual_close>0</manual_close>
             <dependencies/>
+            <tags/>
         </trigger>
         <trigger>
             <expression>{template_oracle_odbc:db.odbc.select[ora_session_active, {$DSN}].last()}&gt;200</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
             <name>Active Session {HOST.HOST}</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
             <url/>
             <status>0</status>
             <priority>4</priority>
             <description>DANGER</description>
             <type>0</type>
+            <manual_close>0</manual_close>
             <dependencies/>
+            <tags/>
         </trigger>
         <trigger>
             <expression>{template_oracle_odbc:db.odbc.select[ora_archive, {$DSN}].last()}&gt;100</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
             <name>Archivelog {HOST.HOST}</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
             <url/>
             <status>0</status>
             <priority>2</priority>
             <description>HIGH Archivelog generation</description>
             <type>0</type>
+            <manual_close>0</manual_close>
             <dependencies/>
+            <tags/>
         </trigger>
         <trigger>
             <expression>{template_oracle_odbc:db.odbc.select[ora_audit, {$DSN}].str(none)}=0</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
             <name>Audit on {HOST.HOST}</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
             <url/>
-            <status>0</status>
+            <status>1</status>
             <priority>4</priority>
             <description/>
             <type>0</type>
+            <manual_close>0</manual_close>
             <dependencies/>
+            <tags/>
         </trigger>
         <trigger>
             <expression>{template_oracle_odbc:db.odbc.select[ora_hitratio_table_proc, {$DSN}].avg(60)}&lt;50 or {template_oracle_odbc:db.odbc.select[ora_hitratio_trigger, {$DSN}].avg(60)}&lt;50 or {template_oracle_odbc:db.odbc.select[ora_hitratio_sqlarea, {$DSN}].avg(60)}&lt;50 or {template_oracle_odbc:db.odbc.select[ora_hitratio_body, {$DSN}].avg(60)}&lt;50</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
             <name>Hit Ratio on {HOST.HOST}</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
             <url/>
             <status>0</status>
             <priority>4</priority>
             <description/>
             <type>0</type>
+            <manual_close>0</manual_close>
             <dependencies/>
+            <tags/>
         </trigger>
         <trigger>
             <expression>{template_oracle_odbc:db.odbc.select[ora_locks, {$DSN}].str(none)}=0</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
             <name>Locks on {HOST.HOST}</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
             <url/>
-            <status>0</status>
+            <status>1</status>
             <priority>4</priority>
             <description/>
             <type>0</type>
+            <manual_close>0</manual_close>
             <dependencies/>
+            <tags/>
         </trigger>
         <trigger>
             <expression>({template_oracle_odbc:db.odbc.select[ora_pga, {$DSN}].last()}*100/{template_oracle_odbc:db.odbc.select[ora_pga_aggregate_target, {$DSN}].last()})&gt;90</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
             <name>PGA Alarm on {HOST.HOST}</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
             <url/>
             <status>0</status>
             <priority>4</priority>
             <description/>
             <type>0</type>
+            <manual_close>0</manual_close>
             <dependencies/>
+            <tags/>
         </trigger>
         <trigger>
             <expression>({template_oracle_odbc:db.odbc.select[ora_procnum, {$DSN}].last()}*100/{template_oracle_odbc:db.odbc.select[ora_maxprocs, {$DSN}].last()})&gt;80</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
             <name>Process Alarm on {HOST.HOST}</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
             <url/>
             <status>0</status>
             <priority>4</priority>
             <description/>
             <type>0</type>
+            <manual_close>0</manual_close>
             <dependencies/>
+            <tags/>
         </trigger>
         <trigger>
             <expression>({template_oracle_odbc:db.odbc.select[ora_session, {$DSN}].last()}*100/{template_oracle_odbc:db.odbc.select[ora_maxsession, {$DSN}].last()})&gt;80</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
             <name>Session Alarm on {HOST.HOST}</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
             <url/>
             <status>0</status>
             <priority>4</priority>
             <description/>
             <type>0</type>
+            <manual_close>0</manual_close>
             <dependencies/>
+            <tags/>
         </trigger>
         <trigger>
-            <expression>({template_oracle_odbc:db.odbc.select[ora_session, {$DSN}].last()}*100/{template_oracle_odbc:db.odbc.select[ora_maxsession, {$DSN}].last()})&gt;100</expression>
+            <expression>({template_oracle_odbc:db.odbc.select[ora_session, {$DSN}].last()}*100/{template_oracle_odbc:db.odbc.select[ora_maxsession, {$DSN}].last()})&gt;98</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
             <name>Session Alarm on {HOST.HOST}</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
             <url/>
             <status>0</status>
-            <priority>4</priority>
+            <priority>5</priority>
             <description/>
             <type>0</type>
+            <manual_close>0</manual_close>
             <dependencies/>
+            <tags/>
         </trigger>
         <trigger>
             <expression>{template_oracle_odbc:db.odbc.select[ora_tbl_space, {$DSN}].str(none)}=0</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
             <name>Tablespaces on {HOST.HOST}</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
             <url/>
-            <status>0</status>
+            <status>1</status>
             <priority>4</priority>
             <description/>
             <type>0</type>
+            <manual_close>0</manual_close>
             <dependencies/>
+            <tags/>
         </trigger>
         <trigger>
             <expression>{template_oracle_odbc:db.odbc.select[ora_uptime, {$DSN}].last()}&lt;1</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
             <name>Uptime on {HOST.HOST}</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
             <url/>
             <status>0</status>
             <priority>4</priority>
             <description/>
             <type>0</type>
+            <manual_close>0</manual_close>
             <dependencies/>
+            <tags/>
         </trigger>
         <trigger>
             <expression>{template_oracle_odbc:db.odbc.select[ora_users_locked, {$DSN}].str(none)}=0</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
             <name>User Locked on {HOST.HOST}</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
             <url/>
             <status>0</status>
             <priority>4</priority>
             <description/>
             <type>0</type>
+            <manual_close>0</manual_close>
             <dependencies/>
+            <tags/>
         </trigger>
     </triggers>
     <graphs>
@@ -2944,9 +3301,12 @@ SELECT username&#13;
             <percent_left>0.0000</percent_left>
             <percent_right>0.0000</percent_right>
             <ymin_type_1>1</ymin_type_1>
-            <ymax_type_1>0</ymax_type_1>
+            <ymax_type_1>2</ymax_type_1>
             <ymin_item_1>0</ymin_item_1>
-            <ymax_item_1>0</ymax_item_1>
+            <ymax_item_1>
+                <host>template_oracle_odbc</host>
+                <key>db.odbc.select[ora_pga_aggregate_target, {$DSN}]</key>
+            </ymax_item_1>
             <graph_items>
                 <graph_item>
                     <sortorder>0</sortorder>
@@ -3022,7 +3382,7 @@ SELECT username&#13;
             <name>Pin Hit Ratio</name>
             <width>900</width>
             <height>200</height>
-            <yaxismin>0.0000</yaxismin>
+            <yaxismin>90.0000</yaxismin>
             <yaxismax>100.0000</yaxismax>
             <show_work_period>0</show_work_period>
             <show_triggers>0</show_triggers>
@@ -3082,6 +3442,30 @@ SELECT username&#13;
                     <item>
                         <host>template_oracle_odbc</host>
                         <key>db.odbc.select[ora_pinhitratio_trigger, {$DSN}]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>4</sortorder>
+                    <drawtype>0</drawtype>
+                    <color>FC6EA3</color>
+                    <yaxisside>0</yaxisside>
+                    <calc_fnc>2</calc_fnc>
+                    <type>0</type>
+                    <item>
+                        <host>template_oracle_odbc</host>
+                        <key>db.odbc.select[ora_pinhitratio_dblink, {$DSN}]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>5</sortorder>
+                    <drawtype>0</drawtype>
+                    <color>6C59DC</color>
+                    <yaxisside>0</yaxisside>
+                    <calc_fnc>2</calc_fnc>
+                    <type>0</type>
+                    <item>
+                        <host>template_oracle_odbc</host>
+                        <key>db.odbc.select[ora_pinhitratio_index, {$DSN}]</key>
                     </item>
                 </graph_item>
             </graph_items>
@@ -3144,24 +3528,15 @@ SELECT username&#13;
             <percent_left>0.0000</percent_left>
             <percent_right>0.0000</percent_right>
             <ymin_type_1>1</ymin_type_1>
-            <ymax_type_1>0</ymax_type_1>
+            <ymax_type_1>2</ymax_type_1>
             <ymin_item_1>0</ymin_item_1>
-            <ymax_item_1>0</ymax_item_1>
+            <ymax_item_1>
+                <host>template_oracle_odbc</host>
+                <key>db.odbc.select[ora_maxsession, {$DSN}]</key>
+            </ymax_item_1>
             <graph_items>
                 <graph_item>
                     <sortorder>0</sortorder>
-                    <drawtype>0</drawtype>
-                    <color>3333FF</color>
-                    <yaxisside>0</yaxisside>
-                    <calc_fnc>2</calc_fnc>
-                    <type>0</type>
-                    <item>
-                        <host>template_oracle_odbc</host>
-                        <key>db.odbc.select[ora_session_inactive, {$DSN}]</key>
-                    </item>
-                </graph_item>
-                <graph_item>
-                    <sortorder>1</sortorder>
                     <drawtype>0</drawtype>
                     <color>FF33FF</color>
                     <yaxisside>0</yaxisside>
@@ -3173,7 +3548,7 @@ SELECT username&#13;
                     </item>
                 </graph_item>
                 <graph_item>
-                    <sortorder>2</sortorder>
+                    <sortorder>1</sortorder>
                     <drawtype>0</drawtype>
                     <color>00BB00</color>
                     <yaxisside>0</yaxisside>
@@ -3182,6 +3557,18 @@ SELECT username&#13;
                     <item>
                         <host>template_oracle_odbc</host>
                         <key>db.odbc.select[ora_session_active, {$DSN}]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <drawtype>0</drawtype>
+                    <color>3333FF</color>
+                    <yaxisside>0</yaxisside>
+                    <calc_fnc>2</calc_fnc>
+                    <type>0</type>
+                    <item>
+                        <host>template_oracle_odbc</host>
+                        <key>db.odbc.select[ora_session_inactive, {$DSN}]</key>
                     </item>
                 </graph_item>
             </graph_items>
